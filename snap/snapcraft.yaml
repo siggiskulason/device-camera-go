@@ -35,7 +35,11 @@ apps:
       DEVICE_PROFILESDIR: "$SNAP_DATA/config/device-camera-go/res"
     daemon: simple
     plugs: [network, network-bind]
-
+plugs:
+  device-config:
+    interface: content 
+    content: device-config
+    target: $SNAP_DATA/config/device-camera-go/res
 parts:
   version:
     plugin: nil
