@@ -67,13 +67,19 @@ $ sudo snap start edgex-device-camera.device-camera-go
 
 **Note** - content interfaces from snaps installed from the Snap Store that have the same publisher connect automatically. For more information on snap content interfaces please refer to the snapcraft.io [Content Interface](https://snapcraft.io/docs/content-interface) documentation.
 
+### Autostart
+By default, the edgex-device-camera disables its service on install, as the expectation is that the default profile configuration files will be customized, and thus this behavior allows the profile ```configuration.toml``` files in $SNAP_DATA to be modified before the service is first started.
+
+This behavior can be overridden by setting the ```autostart``` configuration setting to "true". This is useful when configuration and/or device profiles are being provided via configuration or gadget snap content interface.
+
+**Note** - this option is typically set from a gadget snap.
 
 ### Rich Configuration
 While it's possible on Ubuntu Core to provide additional profiles via gadget 
 snap content interface, quite often only minor changes to existing profiles are required. 
 
 These changes can be accomplished via support for EdgeX environment variable 
-configuration overrides via the snap's configure and install hooks. 
+configuration overrides via the snap's configure hook.
 If the service has already been started, setting one of these overrides currently requires the
 service to be restarted via the command-line or snapd's REST API. 
 If the overrides are provided via the snap configuration defaults capability of a gadget snap, 
@@ -89,3 +95,31 @@ And restart the service:
 ```$ sudo snap restart edgex-device-camera.device-camera```
 **Note** - at this time changes to configuration values in the [Writable] section are not supported.
 For details on the mapping of configuration options to Config options, please refer to "Service Environment Configuration Overrides".
+
+## Service Environment Configuration Overrides
+**Note** - all of the configuration options below must be specified with the prefix: 'env.'
+
+```
+[Service]
+service.boot-timeout            // Service.BootTimeout
+service.check-interval          // Service.CheckInterval
+service.host                    // Service.Host
+service.port                    // Service.Port
+service.protocol                // Service.Protocol
+service.read-max-limit          // Service_ReadMaxLimit
+service.startup-msg             // Service.StartupMsg
+service.timeout                 // Service.Timeout
+
+[Clients.Data]
+clients.data.port               // Clients.Data.Port
+
+**Note** - the key used here vs. the key used for the edgexfoundry snap (e.g. Data) as device-sdk-go used its own key.
+
+[Clients.Metadata]
+clients.metadata.port          // Clients.Metadata.Port
+
+[Driver]
+driver.user                    // Driver.User
+driver.password                // Driver.Password
+driver.auth-method             // Driver.AuthMethod
+```
