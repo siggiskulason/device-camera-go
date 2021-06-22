@@ -51,10 +51,10 @@ func installConfig() error {
 func installDevProfiles() error {
 	var err error
 
-	profs := [...]string{"axis", "bosch"}
+	profs := [...]string{"-axis", "-bosch", ""}
 
 	for _, v := range profs {
-		path := fmt.Sprintf("/config/device-camera-go/res/camera-%s.yaml", v)
+		path := fmt.Sprintf("/config/device-camera-go/res/camera%s.yaml", v)
 		destFile := hooks.SnapData + path
 		srcFile := hooks.Snap + path
 
